@@ -1,13 +1,19 @@
 {
-	"name": "easy-animation",
+	"name": "easy-animation-css",
 	"version": "1.0.0",
 	"description": "Control CSS animations with javascript",
-	"keywords": ["js", "javascript", "css", "transitions", "animation"],
+	"keywords": [
+		"js",
+		"javascript",
+		"css",
+		"transitions",
+		"animation"
+	],
 	"main": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Ruslan Minniahmetov",
+	"author": "php_array",
 	"license": "ISC",
 	"devDependencies": {
 		"@babel/core": "^7.3.4",
@@ -20,10 +26,11 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/mmmDanone/easy-animation.git"
+		"url": "git+https://github.com/mmmDanone/easy-animation.git"
 	},
 	"bugs": {
 		"url": "https://github.com/mmmDanone/easy-animation/issues"
 	},
-	"homepage": "https://github.com/mmmDanone/easy-animation#readme"
+	"homepage": "https://github.com/mmmDanone/easy-animation#readme",
+	"dependencies": {}
 }
