@@ -1,7 +1,7 @@
 # EasyAnimation
 ## Property EasyAnimation
 ### EasyAnimation.*prefix*
-Устанавливает префикс для классов: ...-enter, ...-enter-active, ...-enter-to, ...-leave, ...-leave-active, ...-leave-to.
+Устанавливает префикс для классов: *...-enter*, *...-enter-active*, *...-enter-to*, *...-leave*, *...-leave-active*, *...-leave-to*.
 ## Methods EasyAnimation
 ### EasyAnimation.*transition*(element[, callback = null])
 **element** - DOMelement, над котором будет производиться скрытие или показ, в зависимости от состояния CSS свойства *display*. Если *none* - показ, если *block* - скрытие.
