@@ -1,6 +1,6 @@
 # EasyAnimation
 ## Property EasyAnimation
-### EasyAnimation.prefix
+### EasyAnimation.*prefix*
 Устанавливает префикс для классов: ...-enter, ...-enter-active, ...-enter-to, ...-leave, ...-leave-active, ...-leave-to.
 ## Methods EasyAnimation
 ### EasyAnimation.*transition*(element[, callback = null])
