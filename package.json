@@ -17,5 +17,13 @@
 		"gulp-babel": "^8.0.0",
 		"gulp-concat": "^2.6.1",
 		"gulp-uglify": "^3.0.2"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mmmDanone/easy-animation.git"
+	},
+	"bugs": {
+		"url": "https://github.com/mmmDanone/easy-animation/issues"
+	},
+	"homepage": "https://github.com/mmmDanone/easy-animation#readme"
 }
