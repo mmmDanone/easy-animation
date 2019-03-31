@@ -1,0 +1,21 @@
+{
+	"name": "easy-animation",
+	"version": "1.0.0",
+	"description": "Control CSS animations with javascript",
+	"keywords": ["js", "javascript", "css", "transitions", "animation"],
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Ruslan Minniahmetov",
+	"license": "ISC",
+	"devDependencies": {
+		"@babel/core": "^7.3.4",
+		"@babel/plugin-transform-strict-mode": "^7.2.0",
+		"@babel/preset-env": "^7.3.4",
+		"gulp": "^4.0.0",
+		"gulp-babel": "^8.0.0",
+		"gulp-concat": "^2.6.1",
+		"gulp-uglify": "^3.0.2"
+	}
+}

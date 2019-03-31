@@ -1,0 +1,2 @@
+window.EasyAnimation = new EasyAnimation;
+})();

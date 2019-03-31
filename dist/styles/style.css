@@ -1,0 +1,97 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+#wrapper {
+	width: 500px;
+	margin: auto;
+}
+
+.control {
+	margin: 25px 0;
+}
+
+.control > a {
+	display: inline-block;
+	background-color: #00f;
+	color: #fff;
+	text-decoration: none;
+	padding: 5px;
+	font-size: 20px;
+	border-radius: 5px;
+}
+
+#ani-el {
+	display: none;
+	background-color: green;
+	color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	font-size: 20px;
+	margin-bottom: 15px;
+	list-style: none;
+	overflow: hidden;
+}
+
+#ani-el > li {
+	background-color: #fff;
+	color: #000;
+	margin: 5px;
+	border-radius: 5px;
+	padding: 5px;
+	cursor: pointer;
+	/* user-select: none; */
+}
+
+.ani-enter {
+	transform-origin: 50% 0 0;
+	transform: scaleY(0);
+}
+
+.ani-enter-active {
+	transform-origin: 50% 0 0;
+	transition: transform 500ms ease-in-out;
+}
+
+.ani-enter-to {
+
+}
+
+.ani-leave {
+
+}
+
+.ani-leave-active {
+	transform-origin: 50% 0 0;
+	transition: transform 500ms ease-in-out;
+}
+
+.ani-leave-to {
+	transform: scaleY(0);
+}
+
+.element-enter {
+	transform: translateX(-250px);
+	opacity: 0.2;
+}
+
+.element-enter-active {
+	transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+}
+
+.element-enter-to {
+	opacity: 0.8;
+}
+
+.element-leave {
+	opacity: 0.8;
+}
+.element-leave-active {
+	transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+}
+.element-leave-to {
+	transform: translateX(250px);
+	opacity: 0.2;
+}

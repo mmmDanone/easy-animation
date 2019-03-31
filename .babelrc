@@ -1,0 +1,17 @@
+{
+	"presets": [
+		["@babel/preset-env", {
+			"targets": {
+				"browsers": [
+					"OperaMini all",
+					"ie 10"
+				]
+			},
+			"modules": false,
+			"loose": true
+		}]
+	],
+	"plugins": [
+		"@babel/plugin-transform-strict-mode"
+	]
+}

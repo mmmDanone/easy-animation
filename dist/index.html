@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8">
+		<title>EasyAnimation</title>
+		<link rel="stylesheet" href="styles/style.css">
+	</head>
+	<body>
+		<div id="wrapper">
+			<div class="control">
+				<a href="#" id="toggle" tabindex="1">Toggle</a>
+				<a href="#" id="add" tabindex="2">Add</a>
+				<a href="https://google.ru/" target="_blank" id="google"><span>Google</span></a>
+			</div>
+			<ul id="ani-el">
+			</ul>
+
+			Далеко-далеко за словесными горами в стране, гласных и согласных живут рыбные тексты. Рыбными но, которой он предупреждал на берегу приставка великий даль знаках свой щеке. Журчит все lorem дал себя переписали, скатился прямо то ведущими обеспечивает запятых, рукописи всеми снова, необходимыми по всей домах страна подпоясал. О переписывается свой парадигматическая его взгляд они, предупредила заглавных семь составитель заголовок одна она мир возвращайся выйти, большой прямо рыбного ручеек, путь курсивных если? Снова она вопроса подзаголовок, свое толку однажды, обеспечивает осталось агенство себя? Послушавшись жаренные взобравшись осталось, своего переписали! Даже, предупреждал! Снова вдали имеет даже заглавных щеке маленький рекламных рукопись дорогу журчит взобравшись великий пояс, вопроса подзаголовок текст приставка напоивший моей, меня домах толку над курсивных за последний пор залетают! Вопрос власти собрал диких, одна страна выйти ipsum, дорогу послушавшись встретил его, деревни безопасную ему решила? Знаках дал, снова текстов букв предупреждал, безопасную что вопрос пояс буквоград проектах первую пустился о заманивший подпоясал, рукописи дорогу своих!
+		</div>
+		<script src="javascript/EasyAnimation.js"></script>
+		<script>
+			var toggle = document.getElementById('toggle');
+			var add = document.getElementById('add');
+			var aniEl = document.getElementById('ani-el');
+
+			function callbackFun(obj) {
+				console.log(obj);
+			}
+
+			function toggleEl(e) {
+				e.preventDefault();
+				EasyAnimation.prefix = 'ani';
+				EasyAnimation.transition(aniEl, callbackFun);
+			}
+
+			function addEl(e) {
+				e.preventDefault();
+
+				var newEl = document.createElement('li');
+				newEl.textContent = Math.random();
+
+				EasyAnimation.prefix = 'element';
+				EasyAnimation.transitionInsert(aniEl, newEl, null, callbackFun);
+			}
+
+			function delEl(e) {
+				e.preventDefault();
+				if(e.target.tagName == 'LI') {
+					EasyAnimation.prefix = 'element';
+					EasyAnimation.transitionRemove(e.target, callbackFun);
+				}
+			}
+
+			function mouseDown(e) {
+				e.preventDefault();
+			}
+
+			toggle.addEventListener('click', toggleEl);
+			add.addEventListener('click', addEl);
+			aniEl.addEventListener('dblclick', delEl);
+			aniEl.addEventListener('mousedown', mouseDown);
+		</script>
+	</body>
+</html>
