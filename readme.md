@@ -1,1 +1,2 @@
-#EasyAnimation
+# EasyAnimation
+## Methods EasyAnimation
