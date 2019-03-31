@@ -1,5 +1,8 @@
 class EasyAnimation {
-	constructor() {
+	constructor(prefix) {
+		if(typeof prefix !== 'undefined') {
+			this.prefix = prefix;
+		}
 		if(this._rAF && this._cAF && this._supportTransition) {
 			return;
 		}
@@ -173,7 +176,7 @@ class EasyAnimation {
 		element.addEventListener('transitionend', element.bindEnd);
 	}
 
-	_showTransitionInsert(targetInsert, newElement, before = null, callback) {
+	_showTransitionInsert(targetInsert, newElement, before, callback) {
 		newElement.animationProcessing = 'show';
 		if(typeof callback === 'function') {
 			callback({element: newElement, type: 'insert', when: 'before', related: false});
