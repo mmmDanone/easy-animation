@@ -1,10 +1,10 @@
 {
 	"name": "easy-animation-css",
-	"version": "1.0.2",
-	"description": "Control CSS animations with javascript",
+	"version": "1.1.0",
+	"description": "Control CSS animations with JavaScript",
 	"keywords": [
 		"js",
-		"javascript",
+		"JavaScript",
 		"css",
 		"transitions",
 		"animation"
@@ -13,7 +13,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "php_array",
+	"author": "Ruslan Minniahmetov",
 	"license": "ISC",
 	"devDependencies": {
 		"@babel/core": "^7.3.4",

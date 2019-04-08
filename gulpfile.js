@@ -23,9 +23,7 @@ gulp.task('concat-min', function() {
 	.pipe(gulp.dest('./dist/javascript/'));
 });
 
-gulp.task('all', function(){
-	gulp.series('concat-src', 'concat-min');
-});
+gulp.task('default', gulp.parallel('concat-src', 'concat-min'));
 
 gulp.task('watch', function(){
 	gulp.watch(['./src/EasyAnimation.js', './src/for-index-end.js', './src/for-es5-start.js', './src/for-es5-end.js'], gulp.series('concat-src', 'concat-min'));

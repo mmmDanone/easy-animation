@@ -1,7 +1,10 @@
 class EasyAnimation {
-	constructor(prefix) {
-		if(typeof prefix !== 'undefined') {
+	constructor(prefix, callback) {
+		if(typeof prefix === 'string') {
 			this.prefix = prefix;
+		}
+		if(typeof callback === 'function') {
+			this.callback = callback;
 		}
 		if(this._rAF && this._cAF && this._supportTransition) {
 			return;
@@ -52,21 +55,13 @@ class EasyAnimation {
 
 		if(!this._supportTransition) {
 			if(element.style.display === 'block') {
-				if(typeof callback === 'function') {
-					callback({element: element, type: 'hide', when: 'before', related: false});
-				}
+				this._callBack(callback, element, 'hide', 'before', false);
 				element.style.display = 'none'
-				if(typeof callback === 'function') {
-					callback({element: element, type: 'hide', when: 'after', related: false});
-				}
+				this._callBack(callback, element, 'hide', 'after', false);
 			} else {
-				if(typeof callback === 'function') {
-					callback({element: element, type: 'show', when: 'before', related: false});
-				}
+				this._callBack(callback, element, 'show', 'before', false);
 				element.style.display = 'block';
-				if(typeof callback === 'function') {
-					callback({element: element, type: 'show', when: 'after', related: false});
-				}
+				this._callBack(callback, element, 'show', 'after', false);
 			}
 			return;
 		}
@@ -80,13 +75,9 @@ class EasyAnimation {
 		}
 
 		if(!this._supportTransition || targetInsert.style.display === 'none') {
-			if(typeof callback === 'function') {
-				callback({element: newElement, type: 'insert', when: 'before', related: false});
-			}
+			this._callBack(callback, newElement, 'insert', 'before', false);
 			targetInsert.insertBefore(newElement, before);
-			if(typeof callback === 'function') {
-				callback({element: newElement, type: 'insert', when: 'after', related: false});
-			}
+			this._callBack(callback, newElement, 'insert', 'after', false);
 			return;
 		}
 
@@ -105,13 +96,9 @@ class EasyAnimation {
 		}
 
 		if(!this._supportTransition || parentElement.style.display === 'none') {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'remove', when: 'before', related: false});
-			}
+			this._callBack(callback, element, 'remove', 'before', false);
 			element.parentElement.removeChild(element);
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'remove', when: 'after', related: false});
-			}
+			this._callBack(callback, element, 'remove', 'after', false);
 			return;
 		}
 
@@ -120,17 +107,13 @@ class EasyAnimation {
 
 	_showTransition(element, callback) {
 		if(element.animationProcessing === 'hide') {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'show', when: 'before', related: true});
-			}
+			this._callBack(callback, element, 'show', 'before', true);
 			element.removeEventListener('transitionend', element.bindEnd);
 
 			this._classesControl(element, 'remove', [this.leave, this.leaveActive, this.leaveTo]);
 			this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
 		} else {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'show', when: 'before', related: false});
-			}
+			this._callBack(callback, element, 'show', 'before', false);
 			this._classesControl(element, 'add', [this.enter]);
 			element.style.display = 'block';
 
@@ -148,9 +131,7 @@ class EasyAnimation {
 
 	_hideTransition(element, callback) {
 		if(element.animationProcessing === 'show') {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'hide', when: 'before', related: true});
-			}
+			this._callBack(callback, element, 'hide', 'before', true);
 			element.removeEventListener('transitionend', element.bindEnd);
 
 			this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
@@ -159,9 +140,7 @@ class EasyAnimation {
 			this._showTransition(element, callback);
 			return;
 		} else {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'hide', when: 'before', related: false});
-			}
+			this._callBack(callback, element, 'hide', 'before', false);
 			this._classesControl(element, 'add', [this.leave]);
 
 			this._forNextFrame(() => {
@@ -178,9 +157,7 @@ class EasyAnimation {
 
 	_showTransitionInsert(targetInsert, newElement, before, callback) {
 		newElement.animationProcessing = 'show';
-		if(typeof callback === 'function') {
-			callback({element: newElement, type: 'insert', when: 'before', related: false});
-		}
+		this._callBack(callback, newElement, 'insert', 'before', false);
 
 		this._classesControl(newElement, 'add', [this.enter]);
 		targetInsert.insertBefore(newElement, before);
@@ -196,17 +173,13 @@ class EasyAnimation {
 
 	_hideTransitionRemove(element, callback) {
 		if(element.animationProcessing === 'show') {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'remove', when: 'before', related: true});
-			}
+			this._callBack(callback, element, 'remove', 'before', true);
 			element.removeEventListener('transitionend', element.bindEnd);
 
 			this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
 			this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
 		} else {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'remove', when: 'before', related: false});
-			}
+			this._callBack(callback, element, 'remove', 'before', false);
 			this._classesControl(element, 'add', [this.leave]);
 
 			this._forNextFrame(() => {
@@ -225,34 +198,17 @@ class EasyAnimation {
 		let element = e.currentTarget;
 		delete element.animationProcessing;
 
-		if(type === 'show') {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'show', when: 'after', related: false});
-			}
-		}
-
 		if(type === 'hide') {
 			element.style.display = 'none';
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'hide', when: 'after', related: false});
-			}
-		}
-
-		if(type === 'insert') {
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'insert', when: 'after', related: false});
-			}
 		}
 
 		this._classesControl(element, 'remove', [classActive, classTo]);
 
 		if(type === 'remove') {
 			element.parentElement.removeChild(element);
-			if(typeof callback === 'function') {
-				callback({element: element, type: 'remove', when: 'after', related: false});
-			}
 		}
 
+		this._callBack(callback, element, type, 'after', false);
 		element.removeEventListener('transitionend', element.bindEnd);
 		delete element.bindEnd;
 	}
@@ -269,5 +225,13 @@ class EasyAnimation {
 				callback();
 			});
 		});
+	}
+
+	_callBack(callback, element, type, when, related) {
+		if(typeof this.callback === 'function') {
+			this.callback({element: element, type: type, when: when, related: related});
+		} else if(typeof callback === 'function') {
+			callback({element: element, type: type, when: when, related: related});
+		}
 	}
 }
