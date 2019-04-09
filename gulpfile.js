@@ -4,12 +4,12 @@ const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 
 gulp.task('concat-src', function() {
-	return gulp.src(['src/EasyAnimation.js', 'src/for-index-end.js'])
-	.pipe(concat('index.js'))
-	.pipe(babel())
+	return gulp.src(['src/for-index-start.js', 'src/EasyAnimation.js'])
+	.pipe(concat('index.js', {newLine: ' '}))
+/*	.pipe(babel())
 	.pipe(uglify({
 		toplevel: true
-	}))
+	}))*/
 	.pipe(gulp.dest('./src/'));
 });
 

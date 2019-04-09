@@ -1,1 +1,237 @@
-"use strict";function n(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}var e=function(){function s(e,t){if("string"==typeof e&&(this.prefix=e),"function"==typeof t&&(this.callback=t),!(this._rAF&&this._cAF&&this._supportTransition)){var i=s.prototype;i._rAF=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.msRequestAnimationFrame||window.mozRequestAnimationFrame||!1,i._cAF=window.cancelAnimationFrame||window.webkitCancelAnimationFrame||window.msCancelAnimationFrame||window.mozCancelAnimationFrame||window.webkitCancelRequestAnimationFrame||!1,this._rAF&&this._cAF&&(i._rAF=this._rAF.bind(window),i._cAF=this._cAF.bind(window));var n=document.createElement("div").style.transition;i._supportTransition=!(void 0===n||!this._rAF||!this._cAF)}}var e=s.prototype;return e.transition=function(e,t){void 0===t&&(t=null),e.style.display||(e.style.display=window.getComputedStyle(e).display),this._supportTransition?"block"===e.style.display?this._hideTransition(e,t):this._showTransition(e,t):"block"===e.style.display?(this._callBack(t,e,"hide","before",!1),e.style.display="none",this._callBack(t,e,"hide","after",!1)):(this._callBack(t,e,"show","before",!1),e.style.display="block",this._callBack(t,e,"show","after",!1))},e.transitionInsert=function(e,t,i,n){if(void 0===i&&(i=null),void 0===n&&(n=null),e.style.display||(e.style.display=window.getComputedStyle(e).display),!this._supportTransition||"none"===e.style.display)return this._callBack(n,t,"insert","before",!1),e.insertBefore(t,i),void this._callBack(n,t,"insert","after",!1);this._showTransitionInsert(e,t,i,n)},e.transitionRemove=function(e,t){if(void 0===t&&(t=null),"hide"!==e.animationProcessing){var i=e.parentElement;if(i.style.display||(i.style.display=window.getComputedStyle(i).display),!this._supportTransition||"none"===i.style.display)return this._callBack(t,e,"remove","before",!1),e.parentElement.removeChild(e),void this._callBack(t,e,"remove","after",!1);this._hideTransitionRemove(e,t)}},e._showTransition=function(e,t){var i=this;"hide"===e.animationProcessing?(this._callBack(t,e,"show","before",!0),e.removeEventListener("transitionend",e.bindEnd),this._classesControl(e,"remove",[this.leave,this.leaveActive,this.leaveTo]),this._classesControl(e,"add",[this.enterActive,this.enterTo])):(this._callBack(t,e,"show","before",!1),this._classesControl(e,"add",[this.enter]),e.style.display="block",this._forNextFrame(function(){i._classesControl(e,"add",[i.enterActive,i.enterTo]),i._classesControl(e,"remove",[i.enter])})),e.animationProcessing="show",e.bindEnd=this._afterAnimation.bind(this,this.enterActive,this.enterTo,"show",t),e.addEventListener("transitionend",e.bindEnd)},e._hideTransition=function(e,t){var i=this;if("show"===e.animationProcessing)this._callBack(t,e,"hide","before",!0),e.removeEventListener("transitionend",e.bindEnd),this._classesControl(e,"remove",[this.enter,this.enterActive,this.enterTo]),this._classesControl(e,"add",[this.leaveActive,this.leaveTo]);else{if("hide"===e.animationProcessing)return void this._showTransition(e,t);this._callBack(t,e,"hide","before",!1),this._classesControl(e,"add",[this.leave]),this._forNextFrame(function(){i._classesControl(e,"add",[i.leaveActive,i.leaveTo]),i._classesControl(e,"remove",[i.leave])})}e.animationProcessing="hide",e.bindEnd=this._afterAnimation.bind(this,this.leaveActive,this.leaveTo,"hide",t),e.addEventListener("transitionend",e.bindEnd)},e._showTransitionInsert=function(e,t,i,n){var s=this;t.animationProcessing="show",this._callBack(n,t,"insert","before",!1),this._classesControl(t,"add",[this.enter]),e.insertBefore(t,i),this._forNextFrame(function(){s._classesControl(t,"add",[s.enterActive,s.enterTo]),s._classesControl(t,"remove",[s.enter])}),t.bindEnd=this._afterAnimation.bind(this,this.enterActive,this.enterTo,"insert",n),t.addEventListener("transitionend",t.bindEnd)},e._hideTransitionRemove=function(e,t){var i=this;"show"===e.animationProcessing?(this._callBack(t,e,"remove","before",!0),e.removeEventListener("transitionend",e.bindEnd),this._classesControl(e,"remove",[this.enter,this.enterActive,this.enterTo]),this._classesControl(e,"add",[this.leaveActive,this.leaveTo])):(this._callBack(t,e,"remove","before",!1),this._classesControl(e,"add",[this.leave]),this._forNextFrame(function(){i._classesControl(e,"add",[i.leaveActive,i.leaveTo]),i._classesControl(e,"remove",[i.leave])})),e.animationProcessing="hide",e.bindEnd=this._afterAnimation.bind(this,this.leaveActive,this.leaveTo,"remove",t),e.addEventListener("transitionend",e.bindEnd)},e._afterAnimation=function(e,t,i,n,s){var o=s.currentTarget;delete o.animationProcessing,"hide"===i&&(o.style.display="none"),this._classesControl(o,"remove",[e,t]),"remove"===i&&o.parentElement.removeChild(o),this._callBack(n,o,i,"after",!1),o.removeEventListener("transitionend",o.bindEnd),delete o.bindEnd},e._classesControl=function(e,t,i){for(var n=0,s=i.length;n<s;n++)e.classList[t](i[n])},e._forNextFrame=function(e){var t=this;this._rAF(function(){t._rAF(function(){e()})})},e._callBack=function(e,t,i,n,s){"function"==typeof this.callback?this.callback({element:t,type:i,when:n,related:s}):"function"==typeof e&&e({element:t,type:i,when:n,related:s})},function(e,t,i){t&&n(e.prototype,t),i&&n(e,i)}(s,[{key:"prefix",set:function(e){this.enter=e+"-enter",this.enterActive=e+"-enter-active",this.enterTo=e+"-enter-to",this.leave=e+"-leave",this.leaveActive=e+"-leave-active",this.leaveTo=e+"-leave-to"}}]),s}();module.exports=e;
+export default class EasyAnimation {
+	constructor(prefix, callback) {
+		if(typeof prefix === 'string') {
+			this.prefix = prefix;
+		}
+		if(typeof callback === 'function') {
+			this.callback = callback;
+		}
+		if(this._rAF && this._cAF && this._supportTransition) {
+			return;
+		}
+
+		let self = EasyAnimation.prototype;
+
+		self._rAF = (function() {
+			return window.requestAnimationFrame ||
+			window.webkitRequestAnimationFrame ||
+			window.msRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			false;
+		})();
+
+		self._cAF = (function() {
+			return window.cancelAnimationFrame ||
+			window.webkitCancelAnimationFrame ||
+			window.msCancelAnimationFrame ||
+			window.mozCancelAnimationFrame ||
+			window.webkitCancelRequestAnimationFrame ||
+			false;
+		})();
+
+		if(this._rAF && this._cAF) {
+			self._rAF = this._rAF.bind(window);
+			self._cAF = this._cAF.bind(window);
+		}
+
+		let checkTransition = document.createElement('div').style.transition;
+		self._supportTransition = (typeof checkTransition !== 'undefined' && this._rAF && this._cAF) ? true :false;
+	}
+
+	set prefix(prefix) {
+		this.enter = prefix + '-enter';
+		this.enterActive = prefix + '-enter-active';
+		this.enterTo = prefix + '-enter-to';
+
+		this.leave = prefix + '-leave';
+		this.leaveActive = prefix + '-leave-active';
+		this.leaveTo = prefix + '-leave-to';
+	}
+
+	transition(element, callback = null) {
+		if(!element.style.display){
+			element.style.display = window.getComputedStyle(element).display;
+		}
+
+		if(!this._supportTransition) {
+			if(element.style.display === 'block') {
+				this._callBack(callback, element, 'hide', 'before', false);
+				element.style.display = 'none'
+				this._callBack(callback, element, 'hide', 'after', false);
+			} else {
+				this._callBack(callback, element, 'show', 'before', false);
+				element.style.display = 'block';
+				this._callBack(callback, element, 'show', 'after', false);
+			}
+			return;
+		}
+
+		(element.style.display === 'block') ? this._hideTransition(element, callback) : this._showTransition(element, callback);
+	}
+
+	transitionInsert(targetInsert, newElement, before = null, callback = null) {
+		if(!targetInsert.style.display){
+			targetInsert.style.display = window.getComputedStyle(targetInsert).display;
+		}
+
+		if(!this._supportTransition || targetInsert.style.display === 'none') {
+			this._callBack(callback, newElement, 'insert', 'before', false);
+			targetInsert.insertBefore(newElement, before);
+			this._callBack(callback, newElement, 'insert', 'after', false);
+			return;
+		}
+
+		this._showTransitionInsert(targetInsert, newElement, before, callback);
+	}
+
+	transitionRemove(element, callback = null) {
+		if(element.animationProcessing === 'hide') {
+			return;
+		}
+
+		let parentElement = element.parentElement;
+
+		if(!parentElement.style.display){
+			parentElement.style.display = window.getComputedStyle(parentElement).display;
+		}
+
+		if(!this._supportTransition || parentElement.style.display === 'none') {
+			this._callBack(callback, element, 'remove', 'before', false);
+			element.parentElement.removeChild(element);
+			this._callBack(callback, element, 'remove', 'after', false);
+			return;
+		}
+
+		this._hideTransitionRemove(element, callback);
+	}
+
+	_showTransition(element, callback) {
+		if(element.animationProcessing === 'hide') {
+			this._callBack(callback, element, 'show', 'before', true);
+			element.removeEventListener('transitionend', element.bindEnd);
+
+			this._classesControl(element, 'remove', [this.leave, this.leaveActive, this.leaveTo]);
+			this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
+		} else {
+			this._callBack(callback, element, 'show', 'before', false);
+			this._classesControl(element, 'add', [this.enter]);
+			element.style.display = 'block';
+
+			this._forNextFrame(() => {
+				this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
+				this._classesControl(element, 'remove', [this.enter]);
+			});
+		}
+
+		element.animationProcessing = 'show';
+
+		element.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'show', callback);
+		element.addEventListener('transitionend', element.bindEnd);
+	}
+
+	_hideTransition(element, callback) {
+		if(element.animationProcessing === 'show') {
+			this._callBack(callback, element, 'hide', 'before', true);
+			element.removeEventListener('transitionend', element.bindEnd);
+
+			this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
+			this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+		} else if(element.animationProcessing === 'hide') {
+			this._showTransition(element, callback);
+			return;
+		} else {
+			this._callBack(callback, element, 'hide', 'before', false);
+			this._classesControl(element, 'add', [this.leave]);
+
+			this._forNextFrame(() => {
+				this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+				this._classesControl(element, 'remove', [this.leave]);
+			});
+		}
+
+		element.animationProcessing = 'hide';
+
+		element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'hide', callback);
+		element.addEventListener('transitionend', element.bindEnd);
+	}
+
+	_showTransitionInsert(targetInsert, newElement, before, callback) {
+		newElement.animationProcessing = 'show';
+		this._callBack(callback, newElement, 'insert', 'before', false);
+
+		this._classesControl(newElement, 'add', [this.enter]);
+		targetInsert.insertBefore(newElement, before);
+
+		this._forNextFrame(() => {
+			this._classesControl(newElement, 'add', [this.enterActive, this.enterTo]);
+			this._classesControl(newElement, 'remove', [this.enter]);
+		});
+
+		newElement.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'insert', callback);
+		newElement.addEventListener('transitionend', newElement.bindEnd);
+	}
+
+	_hideTransitionRemove(element, callback) {
+		if(element.animationProcessing === 'show') {
+			this._callBack(callback, element, 'remove', 'before', true);
+			element.removeEventListener('transitionend', element.bindEnd);
+
+			this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
+			this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+		} else {
+			this._callBack(callback, element, 'remove', 'before', false);
+			this._classesControl(element, 'add', [this.leave]);
+
+			this._forNextFrame(() => {
+				this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+				this._classesControl(element, 'remove', [this.leave]);
+			});
+		}
+
+		element.animationProcessing = 'hide';
+
+		element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'remove', callback);
+		element.addEventListener('transitionend', element.bindEnd);
+	}
+
+	_afterAnimation(classActive, classTo, type, callback, e) {
+		let element = e.currentTarget;
+		delete element.animationProcessing;
+
+		if(type === 'hide') {
+			element.style.display = 'none';
+		}
+
+		this._classesControl(element, 'remove', [classActive, classTo]);
+
+		if(type === 'remove') {
+			element.parentElement.removeChild(element);
+		}
+
+		this._callBack(callback, element, type, 'after', false);
+		element.removeEventListener('transitionend', element.bindEnd);
+		delete element.bindEnd;
+	}
+
+	_classesControl(element, type, classes) {
+		for (let i = 0, len = classes.length; i < len; i++) {
+			element.classList[type](classes[i]);
+		}
+	}
+
+	_forNextFrame(callback) {
+		this._rAF(() => {
+			this._rAF(() => {
+				callback();
+			});
+		});
+	}
+
+	_callBack(callback, element, type, when, related) {
+		if(typeof this.callback === 'function') {
+			this.callback({element: element, type: type, when: when, related: related});
+		} else if(typeof callback === 'function') {
+			callback({element: element, type: type, when: when, related: related});
+		}
+	}
+}

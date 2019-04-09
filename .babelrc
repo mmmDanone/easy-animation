@@ -7,7 +7,7 @@
 					"ie 10"
 				]
 			},
-			"modules": false,
+			"modules": 'auto',
 			"loose": true
 		}]
 	],
