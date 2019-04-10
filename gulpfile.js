@@ -26,5 +26,5 @@ gulp.task('concat-min', function() {
 gulp.task('default', gulp.parallel('concat-src', 'concat-min'));
 
 gulp.task('watch', function(){
-	gulp.watch(['./src/EasyAnimation.js', './src/for-index-end.js', './src/for-es5-start.js', './src/for-es5-end.js'], gulp.series('concat-src', 'concat-min'));
+	gulp.watch(['./src/EasyAnimation.js', './src/for-index-start.js', './src/for-es5-start.js', './src/for-es5-end.js'], gulp.series('concat-src', 'concat-min'));
 });
