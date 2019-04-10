@@ -1,4 +1,4 @@
-export default class EasyAnimation {
+module.exports = class EasyAnimation {
 	constructor(prefix, callback) {
 		if(typeof prefix === 'string') {
 			this.prefix = prefix;
