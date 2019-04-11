@@ -16,8 +16,14 @@
   _exports.__esModule = true;
   _exports.default = void 0;
 
-  class EasyAnimation {
-    constructor(prefix, callback) {
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+  var EasyAnimation =
+  /*#__PURE__*/
+  function () {
+    function EasyAnimation(prefix, callback) {
       if (typeof prefix === 'string') {
         this.prefix = prefix;
       }
@@ -30,7 +36,7 @@
         return;
       }
 
-      let self = EasyAnimation.prototype;
+      var self = EasyAnimation.prototype;
 
       self._rAF = function () {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.mozRequestAnimationFrame || false;
@@ -45,20 +51,17 @@
         self._cAF = this._cAF.bind(window);
       }
 
-      let checkTransition = document.createElement('div').style.transition;
+      var checkTransition = document.createElement('div').style.transition;
       self._supportTransition = typeof checkTransition !== 'undefined' && this._rAF && this._cAF ? true : false;
     }
 
-    set prefix(prefix) {
-      this.enter = prefix + '-enter';
-      this.enterActive = prefix + '-enter-active';
-      this.enterTo = prefix + '-enter-to';
-      this.leave = prefix + '-leave';
-      this.leaveActive = prefix + '-leave-active';
-      this.leaveTo = prefix + '-leave-to';
-    }
+    var _proto = EasyAnimation.prototype;
 
-    transition(element, callback = null) {
+    _proto.transition = function transition(element, callback) {
+      if (callback === void 0) {
+        callback = null;
+      }
+
       if (!element.style.display) {
         element.style.display = window.getComputedStyle(element).display;
       }
@@ -82,9 +85,17 @@
       }
 
       element.style.display === 'block' ? this._hideTransition(element, callback) : this._showTransition(element, callback);
-    }
+    };
 
-    transitionInsert(targetInsert, newElement, before = null, callback = null) {
+    _proto.transitionInsert = function transitionInsert(targetInsert, newElement, before, callback) {
+      if (before === void 0) {
+        before = null;
+      }
+
+      if (callback === void 0) {
+        callback = null;
+      }
+
       if (!targetInsert.style.display) {
         targetInsert.style.display = window.getComputedStyle(targetInsert).display;
       }
@@ -100,14 +111,18 @@
       }
 
       this._showTransitionInsert(targetInsert, newElement, before, callback);
-    }
+    };
 
-    transitionRemove(element, callback = null) {
+    _proto.transitionRemove = function transitionRemove(element, callback) {
+      if (callback === void 0) {
+        callback = null;
+      }
+
       if (element.animationProcessing === 'hide') {
         return;
       }
 
-      let parentElement = element.parentElement;
+      var parentElement = element.parentElement;
 
       if (!parentElement.style.display) {
         parentElement.style.display = window.getComputedStyle(parentElement).display;
@@ -124,9 +139,11 @@
       }
 
       this._hideTransitionRemove(element, callback);
-    }
+    };
 
-    _showTransition(element, callback) {
+    _proto._showTransition = function _showTransition(element, callback) {
+      var _this = this;
+
       if (element.animationProcessing === 'hide') {
         this._callBack(callback, element, 'show', 'before', true);
 
@@ -142,19 +159,21 @@
 
         element.style.display = 'block';
 
-        this._forNextFrame(() => {
-          this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
+        this._forNextFrame(function () {
+          _this._classesControl(element, 'add', [_this.enterActive, _this.enterTo]);
 
-          this._classesControl(element, 'remove', [this.enter]);
+          _this._classesControl(element, 'remove', [_this.enter]);
         });
       }
 
       element.animationProcessing = 'show';
       element.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'show', callback);
       element.addEventListener('transitionend', element.bindEnd);
-    }
+    };
 
-    _hideTransition(element, callback) {
+    _proto._hideTransition = function _hideTransition(element, callback) {
+      var _this2 = this;
+
       if (element.animationProcessing === 'show') {
         this._callBack(callback, element, 'hide', 'before', true);
 
@@ -172,19 +191,21 @@
 
         this._classesControl(element, 'add', [this.leave]);
 
-        this._forNextFrame(() => {
-          this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+        this._forNextFrame(function () {
+          _this2._classesControl(element, 'add', [_this2.leaveActive, _this2.leaveTo]);
 
-          this._classesControl(element, 'remove', [this.leave]);
+          _this2._classesControl(element, 'remove', [_this2.leave]);
         });
       }
 
       element.animationProcessing = 'hide';
       element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'hide', callback);
       element.addEventListener('transitionend', element.bindEnd);
-    }
+    };
 
-    _showTransitionInsert(targetInsert, newElement, before, callback) {
+    _proto._showTransitionInsert = function _showTransitionInsert(targetInsert, newElement, before, callback) {
+      var _this3 = this;
+
       newElement.animationProcessing = 'show';
 
       this._callBack(callback, newElement, 'insert', 'before', false);
@@ -193,17 +214,19 @@
 
       targetInsert.insertBefore(newElement, before);
 
-      this._forNextFrame(() => {
-        this._classesControl(newElement, 'add', [this.enterActive, this.enterTo]);
+      this._forNextFrame(function () {
+        _this3._classesControl(newElement, 'add', [_this3.enterActive, _this3.enterTo]);
 
-        this._classesControl(newElement, 'remove', [this.enter]);
+        _this3._classesControl(newElement, 'remove', [_this3.enter]);
       });
 
       newElement.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'insert', callback);
       newElement.addEventListener('transitionend', newElement.bindEnd);
-    }
+    };
 
-    _hideTransitionRemove(element, callback) {
+    _proto._hideTransitionRemove = function _hideTransitionRemove(element, callback) {
+      var _this4 = this;
+
       if (element.animationProcessing === 'show') {
         this._callBack(callback, element, 'remove', 'before', true);
 
@@ -217,20 +240,20 @@
 
         this._classesControl(element, 'add', [this.leave]);
 
-        this._forNextFrame(() => {
-          this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+        this._forNextFrame(function () {
+          _this4._classesControl(element, 'add', [_this4.leaveActive, _this4.leaveTo]);
 
-          this._classesControl(element, 'remove', [this.leave]);
+          _this4._classesControl(element, 'remove', [_this4.leave]);
         });
       }
 
       element.animationProcessing = 'hide';
       element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'remove', callback);
       element.addEventListener('transitionend', element.bindEnd);
-    }
+    };
 
-    _afterAnimation(classActive, classTo, type, callback, e) {
-      let element = e.currentTarget;
+    _proto._afterAnimation = function _afterAnimation(classActive, classTo, type, callback, e) {
+      var element = e.currentTarget;
       delete element.animationProcessing;
 
       if (type === 'hide') {
@@ -247,23 +270,25 @@
 
       element.removeEventListener('transitionend', element.bindEnd);
       delete element.bindEnd;
-    }
+    };
 
-    _classesControl(element, type, classes) {
-      for (let i = 0, len = classes.length; i < len; i++) {
+    _proto._classesControl = function _classesControl(element, type, classes) {
+      for (var i = 0, len = classes.length; i < len; i++) {
         element.classList[type](classes[i]);
       }
-    }
+    };
 
-    _forNextFrame(callback) {
-      this._rAF(() => {
-        this._rAF(() => {
+    _proto._forNextFrame = function _forNextFrame(callback) {
+      var _this5 = this;
+
+      this._rAF(function () {
+        _this5._rAF(function () {
           callback();
         });
       });
-    }
+    };
 
-    _callBack(callback, element, type, when, related) {
+    _proto._callBack = function _callBack(callback, element, type, when, related) {
       if (typeof this.callback === 'function') {
         this.callback({
           element: element,
@@ -279,9 +304,22 @@
           related: related
         });
       }
-    }
+    };
 
-  }
+    _createClass(EasyAnimation, [{
+      key: "prefix",
+      set: function set(prefix) {
+        this.enter = prefix + '-enter';
+        this.enterActive = prefix + '-enter-active';
+        this.enterTo = prefix + '-enter-to';
+        this.leave = prefix + '-leave';
+        this.leaveActive = prefix + '-leave-active';
+        this.leaveTo = prefix + '-leave-to';
+      }
+    }]);
+
+    return EasyAnimation;
+  }();
 
   _exports.default = EasyAnimation;
 });

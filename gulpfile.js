@@ -2,14 +2,17 @@ var babelExport = {
 	"presets": [
 		["@babel/preset-env", {
 			"targets": {
-				"node": true
+				"browsers": [
+					"OperaMini all",
+					"ie 10"
+				]
 			},
 			"modules": "umd",
 			"loose": true
 		}]
 	],
-	"plugins": []
-}
+	"plugins": ["@babel/plugin-transform-strict-mode"]
+};
 
 const gulp = require('gulp');
 const concat = require('gulp-concat');
