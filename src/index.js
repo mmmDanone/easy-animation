@@ -1,237 +1,287 @@
-module.exports = class EasyAnimation {
-	constructor(prefix, callback) {
-		if(typeof prefix === 'string') {
-			this.prefix = prefix;
-		}
-		if(typeof callback === 'function') {
-			this.callback = callback;
-		}
-		if(this._rAF && this._cAF && this._supportTransition) {
-			return;
-		}
+(function (global, factory) {
+  if (typeof define === "function" && define.amd) {
+    define(["exports"], factory);
+  } else if (typeof exports !== "undefined") {
+    factory(exports);
+  } else {
+    var mod = {
+      exports: {}
+    };
+    factory(mod.exports);
+    global.index = mod.exports;
+  }
+})(this, function (_exports) {
+  "use strict";
 
-		let self = EasyAnimation.prototype;
+  _exports.__esModule = true;
+  _exports.default = void 0;
 
-		self._rAF = (function() {
-			return window.requestAnimationFrame ||
-			window.webkitRequestAnimationFrame ||
-			window.msRequestAnimationFrame ||
-			window.mozRequestAnimationFrame ||
-			false;
-		})();
+  class EasyAnimation {
+    constructor(prefix, callback) {
+      if (typeof prefix === 'string') {
+        this.prefix = prefix;
+      }
 
-		self._cAF = (function() {
-			return window.cancelAnimationFrame ||
-			window.webkitCancelAnimationFrame ||
-			window.msCancelAnimationFrame ||
-			window.mozCancelAnimationFrame ||
-			window.webkitCancelRequestAnimationFrame ||
-			false;
-		})();
+      if (typeof callback === 'function') {
+        this.callback = callback;
+      }
 
-		if(this._rAF && this._cAF) {
-			self._rAF = this._rAF.bind(window);
-			self._cAF = this._cAF.bind(window);
-		}
+      if (this._rAF && this._cAF && this._supportTransition) {
+        return;
+      }
 
-		let checkTransition = document.createElement('div').style.transition;
-		self._supportTransition = (typeof checkTransition !== 'undefined' && this._rAF && this._cAF) ? true :false;
-	}
+      let self = EasyAnimation.prototype;
 
-	set prefix(prefix) {
-		this.enter = prefix + '-enter';
-		this.enterActive = prefix + '-enter-active';
-		this.enterTo = prefix + '-enter-to';
+      self._rAF = function () {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.mozRequestAnimationFrame || false;
+      }();
 
-		this.leave = prefix + '-leave';
-		this.leaveActive = prefix + '-leave-active';
-		this.leaveTo = prefix + '-leave-to';
-	}
+      self._cAF = function () {
+        return window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelRequestAnimationFrame || false;
+      }();
 
-	transition(element, callback = null) {
-		if(!element.style.display){
-			element.style.display = window.getComputedStyle(element).display;
-		}
+      if (this._rAF && this._cAF) {
+        self._rAF = this._rAF.bind(window);
+        self._cAF = this._cAF.bind(window);
+      }
 
-		if(!this._supportTransition) {
-			if(element.style.display === 'block') {
-				this._callBack(callback, element, 'hide', 'before', false);
-				element.style.display = 'none'
-				this._callBack(callback, element, 'hide', 'after', false);
-			} else {
-				this._callBack(callback, element, 'show', 'before', false);
-				element.style.display = 'block';
-				this._callBack(callback, element, 'show', 'after', false);
-			}
-			return;
-		}
+      let checkTransition = document.createElement('div').style.transition;
+      self._supportTransition = typeof checkTransition !== 'undefined' && this._rAF && this._cAF ? true : false;
+    }
 
-		(element.style.display === 'block') ? this._hideTransition(element, callback) : this._showTransition(element, callback);
-	}
+    set prefix(prefix) {
+      this.enter = prefix + '-enter';
+      this.enterActive = prefix + '-enter-active';
+      this.enterTo = prefix + '-enter-to';
+      this.leave = prefix + '-leave';
+      this.leaveActive = prefix + '-leave-active';
+      this.leaveTo = prefix + '-leave-to';
+    }
 
-	transitionInsert(targetInsert, newElement, before = null, callback = null) {
-		if(!targetInsert.style.display){
-			targetInsert.style.display = window.getComputedStyle(targetInsert).display;
-		}
+    transition(element, callback = null) {
+      if (!element.style.display) {
+        element.style.display = window.getComputedStyle(element).display;
+      }
 
-		if(!this._supportTransition || targetInsert.style.display === 'none') {
-			this._callBack(callback, newElement, 'insert', 'before', false);
-			targetInsert.insertBefore(newElement, before);
-			this._callBack(callback, newElement, 'insert', 'after', false);
-			return;
-		}
+      if (!this._supportTransition) {
+        if (element.style.display === 'block') {
+          this._callBack(callback, element, 'hide', 'before', false);
 
-		this._showTransitionInsert(targetInsert, newElement, before, callback);
-	}
+          element.style.display = 'none';
 
-	transitionRemove(element, callback = null) {
-		if(element.animationProcessing === 'hide') {
-			return;
-		}
+          this._callBack(callback, element, 'hide', 'after', false);
+        } else {
+          this._callBack(callback, element, 'show', 'before', false);
 
-		let parentElement = element.parentElement;
+          element.style.display = 'block';
 
-		if(!parentElement.style.display){
-			parentElement.style.display = window.getComputedStyle(parentElement).display;
-		}
+          this._callBack(callback, element, 'show', 'after', false);
+        }
 
-		if(!this._supportTransition || parentElement.style.display === 'none') {
-			this._callBack(callback, element, 'remove', 'before', false);
-			element.parentElement.removeChild(element);
-			this._callBack(callback, element, 'remove', 'after', false);
-			return;
-		}
+        return;
+      }
 
-		this._hideTransitionRemove(element, callback);
-	}
+      element.style.display === 'block' ? this._hideTransition(element, callback) : this._showTransition(element, callback);
+    }
 
-	_showTransition(element, callback) {
-		if(element.animationProcessing === 'hide') {
-			this._callBack(callback, element, 'show', 'before', true);
-			element.removeEventListener('transitionend', element.bindEnd);
+    transitionInsert(targetInsert, newElement, before = null, callback = null) {
+      if (!targetInsert.style.display) {
+        targetInsert.style.display = window.getComputedStyle(targetInsert).display;
+      }
 
-			this._classesControl(element, 'remove', [this.leave, this.leaveActive, this.leaveTo]);
-			this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
-		} else {
-			this._callBack(callback, element, 'show', 'before', false);
-			this._classesControl(element, 'add', [this.enter]);
-			element.style.display = 'block';
+      if (!this._supportTransition || targetInsert.style.display === 'none') {
+        this._callBack(callback, newElement, 'insert', 'before', false);
 
-			this._forNextFrame(() => {
-				this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
-				this._classesControl(element, 'remove', [this.enter]);
-			});
-		}
+        targetInsert.insertBefore(newElement, before);
 
-		element.animationProcessing = 'show';
+        this._callBack(callback, newElement, 'insert', 'after', false);
 
-		element.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'show', callback);
-		element.addEventListener('transitionend', element.bindEnd);
-	}
+        return;
+      }
 
-	_hideTransition(element, callback) {
-		if(element.animationProcessing === 'show') {
-			this._callBack(callback, element, 'hide', 'before', true);
-			element.removeEventListener('transitionend', element.bindEnd);
+      this._showTransitionInsert(targetInsert, newElement, before, callback);
+    }
 
-			this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
-			this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
-		} else if(element.animationProcessing === 'hide') {
-			this._showTransition(element, callback);
-			return;
-		} else {
-			this._callBack(callback, element, 'hide', 'before', false);
-			this._classesControl(element, 'add', [this.leave]);
+    transitionRemove(element, callback = null) {
+      if (element.animationProcessing === 'hide') {
+        return;
+      }
 
-			this._forNextFrame(() => {
-				this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
-				this._classesControl(element, 'remove', [this.leave]);
-			});
-		}
+      let parentElement = element.parentElement;
 
-		element.animationProcessing = 'hide';
+      if (!parentElement.style.display) {
+        parentElement.style.display = window.getComputedStyle(parentElement).display;
+      }
 
-		element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'hide', callback);
-		element.addEventListener('transitionend', element.bindEnd);
-	}
+      if (!this._supportTransition || parentElement.style.display === 'none') {
+        this._callBack(callback, element, 'remove', 'before', false);
 
-	_showTransitionInsert(targetInsert, newElement, before, callback) {
-		newElement.animationProcessing = 'show';
-		this._callBack(callback, newElement, 'insert', 'before', false);
+        element.parentElement.removeChild(element);
 
-		this._classesControl(newElement, 'add', [this.enter]);
-		targetInsert.insertBefore(newElement, before);
+        this._callBack(callback, element, 'remove', 'after', false);
 
-		this._forNextFrame(() => {
-			this._classesControl(newElement, 'add', [this.enterActive, this.enterTo]);
-			this._classesControl(newElement, 'remove', [this.enter]);
-		});
+        return;
+      }
 
-		newElement.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'insert', callback);
-		newElement.addEventListener('transitionend', newElement.bindEnd);
-	}
+      this._hideTransitionRemove(element, callback);
+    }
 
-	_hideTransitionRemove(element, callback) {
-		if(element.animationProcessing === 'show') {
-			this._callBack(callback, element, 'remove', 'before', true);
-			element.removeEventListener('transitionend', element.bindEnd);
+    _showTransition(element, callback) {
+      if (element.animationProcessing === 'hide') {
+        this._callBack(callback, element, 'show', 'before', true);
 
-			this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
-			this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
-		} else {
-			this._callBack(callback, element, 'remove', 'before', false);
-			this._classesControl(element, 'add', [this.leave]);
+        element.removeEventListener('transitionend', element.bindEnd);
 
-			this._forNextFrame(() => {
-				this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
-				this._classesControl(element, 'remove', [this.leave]);
-			});
-		}
+        this._classesControl(element, 'remove', [this.leave, this.leaveActive, this.leaveTo]);
 
-		element.animationProcessing = 'hide';
+        this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
+      } else {
+        this._callBack(callback, element, 'show', 'before', false);
 
-		element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'remove', callback);
-		element.addEventListener('transitionend', element.bindEnd);
-	}
+        this._classesControl(element, 'add', [this.enter]);
 
-	_afterAnimation(classActive, classTo, type, callback, e) {
-		let element = e.currentTarget;
-		delete element.animationProcessing;
+        element.style.display = 'block';
 
-		if(type === 'hide') {
-			element.style.display = 'none';
-		}
+        this._forNextFrame(() => {
+          this._classesControl(element, 'add', [this.enterActive, this.enterTo]);
 
-		this._classesControl(element, 'remove', [classActive, classTo]);
+          this._classesControl(element, 'remove', [this.enter]);
+        });
+      }
 
-		if(type === 'remove') {
-			element.parentElement.removeChild(element);
-		}
+      element.animationProcessing = 'show';
+      element.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'show', callback);
+      element.addEventListener('transitionend', element.bindEnd);
+    }
 
-		this._callBack(callback, element, type, 'after', false);
-		element.removeEventListener('transitionend', element.bindEnd);
-		delete element.bindEnd;
-	}
+    _hideTransition(element, callback) {
+      if (element.animationProcessing === 'show') {
+        this._callBack(callback, element, 'hide', 'before', true);
 
-	_classesControl(element, type, classes) {
-		for (let i = 0, len = classes.length; i < len; i++) {
-			element.classList[type](classes[i]);
-		}
-	}
+        element.removeEventListener('transitionend', element.bindEnd);
 
-	_forNextFrame(callback) {
-		this._rAF(() => {
-			this._rAF(() => {
-				callback();
-			});
-		});
-	}
+        this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
 
-	_callBack(callback, element, type, when, related) {
-		if(typeof this.callback === 'function') {
-			this.callback({element: element, type: type, when: when, related: related});
-		} else if(typeof callback === 'function') {
-			callback({element: element, type: type, when: when, related: related});
-		}
-	}
-}
+        this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+      } else if (element.animationProcessing === 'hide') {
+        this._showTransition(element, callback);
+
+        return;
+      } else {
+        this._callBack(callback, element, 'hide', 'before', false);
+
+        this._classesControl(element, 'add', [this.leave]);
+
+        this._forNextFrame(() => {
+          this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+
+          this._classesControl(element, 'remove', [this.leave]);
+        });
+      }
+
+      element.animationProcessing = 'hide';
+      element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'hide', callback);
+      element.addEventListener('transitionend', element.bindEnd);
+    }
+
+    _showTransitionInsert(targetInsert, newElement, before, callback) {
+      newElement.animationProcessing = 'show';
+
+      this._callBack(callback, newElement, 'insert', 'before', false);
+
+      this._classesControl(newElement, 'add', [this.enter]);
+
+      targetInsert.insertBefore(newElement, before);
+
+      this._forNextFrame(() => {
+        this._classesControl(newElement, 'add', [this.enterActive, this.enterTo]);
+
+        this._classesControl(newElement, 'remove', [this.enter]);
+      });
+
+      newElement.bindEnd = this._afterAnimation.bind(this, this.enterActive, this.enterTo, 'insert', callback);
+      newElement.addEventListener('transitionend', newElement.bindEnd);
+    }
+
+    _hideTransitionRemove(element, callback) {
+      if (element.animationProcessing === 'show') {
+        this._callBack(callback, element, 'remove', 'before', true);
+
+        element.removeEventListener('transitionend', element.bindEnd);
+
+        this._classesControl(element, 'remove', [this.enter, this.enterActive, this.enterTo]);
+
+        this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+      } else {
+        this._callBack(callback, element, 'remove', 'before', false);
+
+        this._classesControl(element, 'add', [this.leave]);
+
+        this._forNextFrame(() => {
+          this._classesControl(element, 'add', [this.leaveActive, this.leaveTo]);
+
+          this._classesControl(element, 'remove', [this.leave]);
+        });
+      }
+
+      element.animationProcessing = 'hide';
+      element.bindEnd = this._afterAnimation.bind(this, this.leaveActive, this.leaveTo, 'remove', callback);
+      element.addEventListener('transitionend', element.bindEnd);
+    }
+
+    _afterAnimation(classActive, classTo, type, callback, e) {
+      let element = e.currentTarget;
+      delete element.animationProcessing;
+
+      if (type === 'hide') {
+        element.style.display = 'none';
+      }
+
+      this._classesControl(element, 'remove', [classActive, classTo]);
+
+      if (type === 'remove') {
+        element.parentElement.removeChild(element);
+      }
+
+      this._callBack(callback, element, type, 'after', false);
+
+      element.removeEventListener('transitionend', element.bindEnd);
+      delete element.bindEnd;
+    }
+
+    _classesControl(element, type, classes) {
+      for (let i = 0, len = classes.length; i < len; i++) {
+        element.classList[type](classes[i]);
+      }
+    }
+
+    _forNextFrame(callback) {
+      this._rAF(() => {
+        this._rAF(() => {
+          callback();
+        });
+      });
+    }
+
+    _callBack(callback, element, type, when, related) {
+      if (typeof this.callback === 'function') {
+        this.callback({
+          element: element,
+          type: type,
+          when: when,
+          related: related
+        });
+      } else if (typeof callback === 'function') {
+        callback({
+          element: element,
+          type: type,
+          when: when,
+          related: related
+        });
+      }
+    }
+
+  }
+
+  _exports.default = EasyAnimation;
+});
